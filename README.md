@@ -1,2 +1,2 @@
 # Vonvikken-Notification-Bot-Kotlin
-Telegram Bot for receiving notifications (Python version) 
+Telegram Bot for receiving notifications (Kotlin version) 
