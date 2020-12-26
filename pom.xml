@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.vonvikken</groupId>
+    <artifactId>notification-bot</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <name>Notification Bot</name>
+    <description>Telegram Bot for receiving notifications</description>
+    <inceptionYear>2020</inceptionYear>
+
+    <developers>
+        <developer>
+            <name>Vincenzo Stornanti</name>
+            <timezone>Europe/Rome</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/Vonvikken/Vonvikken-Notification-Bot-Kotlin.git</connection>
+        <developerConnection>
+            scm:git:https://github.com/Vonvikken/Vonvikken-Notification-Bot-Kotlin.git
+        </developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/Vonvikken/Vonvikken-Notification-Bot-Kotlin</url>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <kotlin.version>1.4.21</kotlin.version>
+        <kotlin.compiler.languageVersion>1.4</kotlin.compiler.languageVersion>
+        <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
+        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
