@@ -2,11 +2,10 @@
 
 package org.vonvikken.notificationbot
 
-import java.nio.file.Paths
-
 const val TOKEN_DEFAULT_PATH = "token.json"
+const val SOCKET_DEFAULT_PATH = "/var/tmp/notificationbot.sock"
 
 fun main() {
     // TODO add command line argument
-    NotificationBot(Paths.get(TOKEN_DEFAULT_PATH).toFile())
+    NotificationBot(TOKEN_DEFAULT_PATH)
 }

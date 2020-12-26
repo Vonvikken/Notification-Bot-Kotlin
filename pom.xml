@@ -60,7 +60,7 @@
             <artifactId>telegram</artifactId>
             <version>${kotlin.telegram.bot.version}</version>
         </dependency>
-        <!-- JSON aprser -->
+        <!-- JSON parser -->
         <dependency>
             <groupId>com.beust</groupId>
             <artifactId>klaxon</artifactId>
