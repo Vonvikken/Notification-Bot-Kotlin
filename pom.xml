@@ -40,6 +40,7 @@
         <klaxon.version>5.4</klaxon.version>
         <slf4j.version>1.7.30</slf4j.version>
         <logback.version>1.2.3</logback.version>
+        <junixsocket.version>2.3.2</junixsocket.version>
     </properties>
 
     <repositories>
@@ -65,6 +66,17 @@
             <groupId>com.beust</groupId>
             <artifactId>klaxon</artifactId>
             <version>${klaxon.version}</version>
+        </dependency>
+        <!-- Unix Domain Sockets -->
+        <dependency>
+            <groupId>com.kohlschutter.junixsocket</groupId>
+            <artifactId>junixsocket-core</artifactId>
+            <version>${junixsocket.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kohlschutter.junixsocket</groupId>
+            <artifactId>junixsocket-server</artifactId>
+            <version>${junixsocket.version}</version>
         </dependency>
         <!-- Logging -->
         <dependency>

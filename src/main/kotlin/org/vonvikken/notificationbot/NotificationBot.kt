@@ -6,6 +6,7 @@ import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
+import com.github.kotlintelegrambot.dispatcher.handlers.CommandHandlerEnvironment
 import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.logging.LogLevel
@@ -18,6 +19,9 @@ class NotificationBot(credentialsFilePath: String) {
     private val logger by getLogger { }
     private val bot: Bot
     private val chatID: Long
+
+    var startSocketCallback: OptionalCallback = null
+    var stopSocketCallback: OptionalCallback = null
 
     companion object {
         val escapedCharacters =
@@ -32,11 +36,12 @@ class NotificationBot(credentialsFilePath: String) {
             token = myToken
             logLevel = LogLevel.Error
             dispatch {
-                command("start") {
-                    if (checkMessageChatId(update.message)) {
-                        val text = update.message?.text ?: ""
-                        sendMessage(text)
-                    }
+                command("startSocket") {
+                    execIfAuthorized(startSocketCallback)
+                }
+
+                command("stopSocket") {
+                    execIfAuthorized(stopSocketCallback)
                 }
             }
         }
@@ -45,7 +50,7 @@ class NotificationBot(credentialsFilePath: String) {
         logger.info("Notification bot started")
     }
 
-    private fun sendMessage(text: String, escapeText: Boolean = false) {
+    internal fun sendMessage(text: String, escapeText: Boolean = false) {
         val result = bot.sendMessage(chatID, if (escapeText) text.escape() else text, ParseMode.MARKDOWN_V2)
         logger.debug("Sent message $text")
         result.fold(
@@ -56,6 +61,12 @@ class NotificationBot(credentialsFilePath: String) {
                 logger.error(it.errorBody?.toString() ?: "[Empty error]")
             }
         )
+    }
+
+    private fun CommandHandlerEnvironment.execIfAuthorized(block: OptionalCallback) {
+        if (block != null && checkMessageChatId(update.message)) {
+            block.invoke()
+        }
     }
 
     private fun checkMessageChatId(message: Message?): Boolean {
