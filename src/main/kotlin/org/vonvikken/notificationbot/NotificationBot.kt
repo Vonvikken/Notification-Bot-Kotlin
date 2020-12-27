@@ -52,13 +52,13 @@ class NotificationBot(credentialsFilePath: String) {
 
     internal fun sendMessage(text: String, escapeText: Boolean = false) {
         val result = bot.sendMessage(chatID, if (escapeText) text.escape() else text, ParseMode.MARKDOWN_V2)
-        logger.debug("Sent message $text")
+        logger.debug("Sent message: $text")
         result.fold(
             {
-                logger.debug(it?.result?.text ?: "[Empty response]")
+                logger.debug("Response: ${it?.result?.text ?: "[Empty response]"}")
             },
             {
-                logger.error(it.errorBody?.toString() ?: "[Empty error]")
+                logger.error("Error! ${it.errorBody?.toString() ?: "[Empty error]"}")
             }
         )
     }

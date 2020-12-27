@@ -11,7 +11,7 @@ fun main() {
 
     notificationBot.startSocketCallback = connectionManager::startServer
     notificationBot.stopSocketCallback = connectionManager::stopServer
-    connectionManager.onReceivedCallback = { notificationBot.sendMessage(it, escapeText = false) }
+    connectionManager.onReceivedCallback = { notificationBot.sendMessage(it) }
 
     connectionManager.startServer()
 }

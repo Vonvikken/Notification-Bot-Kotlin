@@ -30,7 +30,7 @@ internal class ConnectionManager(socketPath: String) {
 
     internal fun startServer() {
         if (!isRunning.getAndSet(true)) {
-            serverThread = thread(start = true, name = "Socket server thread") {
+            serverThread = thread(start = true, name = "Socket server") {
                 serverSocket = AFUNIXServerSocket.newInstance()
                 serverSocket.use { server ->
                     server.bind(AFUNIXSocketAddress(socketFile))
@@ -55,9 +55,10 @@ internal class ConnectionManager(socketPath: String) {
                     }
                 }
             }
+            logger.info("Server stopped!")
+        } else {
+            onReceivedCallback?.invoke("Socket already started\\!")
         }
-
-        logger.info("Server stopped!")
     }
 
     internal fun stopServer() {
