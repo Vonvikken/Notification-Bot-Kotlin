@@ -42,6 +42,7 @@
         <slf4j.version>1.7.30</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junixsocket.version>2.3.2</junixsocket.version>
+        <emoji-java.version>5.1.1</emoji-java.version>
     </properties>
 
     <repositories>
@@ -78,6 +79,12 @@
             <groupId>com.kohlschutter.junixsocket</groupId>
             <artifactId>junixsocket-server</artifactId>
             <version>${junixsocket.version}</version>
+        </dependency>
+        <!-- Emoji -->
+        <dependency>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+            <version>${emoji-java.version}</version>
         </dependency>
         <!-- Logging -->
         <dependency>

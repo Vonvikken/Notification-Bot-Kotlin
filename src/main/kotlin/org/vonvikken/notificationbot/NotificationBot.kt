@@ -40,7 +40,7 @@ internal class NotificationBot(config: Config) {
                 command(Command.HELP.commandName) {
                     execIfAuthorized {
                         val stringBuilder = StringBuilder()
-                        stringBuilder.appendLine("*Available commands:*").appendLine()
+                        stringBuilder.appendLine("${"information_source".emoji()}  *Available commands*").appendLine()
                         Command.values().forEach { cmd ->
                             stringBuilder.append("\u2022 `/${cmd.commandName}` ")
                                 .appendLine("\u2192 ${cmd.description.escape()}")
@@ -53,7 +53,7 @@ internal class NotificationBot(config: Config) {
         bot.startPolling()
 
         sendMessage(
-            """*${"Notification bot started!".escape()}*
+            """${"bell".emoji()} *${"Notification bot started!".escape()}*
                |
                |_Use `/help` to list all the available commands_
             """.trimMargin()
@@ -71,6 +71,14 @@ internal class NotificationBot(config: Config) {
             {
                 logger.error("Error! ${it.errorBody?.toString() ?: "[Empty error]"}")
             }
+        )
+    }
+
+    internal fun sendServiceMessage(text: String) {
+        sendMessage(
+            """${"gear".emoji()} *Service message*
+               |
+               |`${text.escape()}`""".trimMargin()
         )
     }
 

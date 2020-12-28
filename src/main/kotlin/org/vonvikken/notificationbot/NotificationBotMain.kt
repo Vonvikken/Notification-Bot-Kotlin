@@ -22,7 +22,7 @@ fun main() {
     notificationBot.serverInfoCallback = connectionManager::serverInfo
 
     connectionManager.onReceivedCallback = { notificationBot.sendMessage(it, escapeText = true) }
-    connectionManager.serviceMessageCallback = { notificationBot.sendMessage("_Service message:_ `${it.escape()}`") }
+    connectionManager.serviceMessageCallback = notificationBot::sendServiceMessage
 
     connectionManager.serverStart()
 }
@@ -32,7 +32,6 @@ internal data class Config(
     @Json(name = "chat_id") val chatID: Long,
     @Json(name = "socket_path") val socketPath: String = SOCKET_DEFAULT_PATH
 ) {
-
     companion object {
         internal fun parseConfig(path: File): Config =
             Klaxon().parse<Config>(path) ?: throw IOException("Cannot parse config file!")
