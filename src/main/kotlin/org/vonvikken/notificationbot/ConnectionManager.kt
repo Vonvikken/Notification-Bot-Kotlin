@@ -3,6 +3,7 @@ package org.vonvikken.notificationbot
 import org.newsclub.net.unix.AFUNIXServerSocket
 import org.newsclub.net.unix.AFUNIXSocketAddress
 import java.io.File
+import java.net.SocketException
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.attribute.PosixFilePermission
@@ -34,38 +35,49 @@ internal class ConnectionManager(socketPath: String) {
                 serverSocket = AFUNIXServerSocket.newInstance()
                 serverSocket.use { server ->
                     server.bind(AFUNIXSocketAddress(socketFile))
+
+                    // TODO separate callback for service messages
+                    onReceivedCallback?.invoke("_Socket server started\\!_")
                     logger.debug("UNIX socket bound to ${socketFile.absolutePath}")
 
                     val permissions = setOf(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE)
                     Files.setPosixFilePermissions(socketFile.toPath(), permissions)
 
-                    // TODO find a way to close the socket
                     while (!serverThread.isInterrupted) {
-                        logger.info("Waiting for connection...")
-                        server.accept().use { socket ->
-                            logger.info("Connected!")
-                            socket.inputStream.use { input ->
-                                val buffer = ByteArray(BUFFER_SIZE)
-                                val numRead = input.read(buffer)
-                                val str = String(buffer, 0, numRead)
-                                logger.debug("Received from socket: $str")
-                                onReceivedCallback?.invoke(str)
+                        logger.debug("Waiting for connection...")
+                        try {
+                            server.accept().use { socket ->
+                                logger.debug("Connected!")
+                                socket.inputStream.use { input ->
+                                    val buffer = ByteArray(BUFFER_SIZE)
+                                    val numRead = input.read(buffer)
+                                    val str = String(buffer, 0, numRead)
+                                    logger.debug("Received from socket: $str")
+                                    onReceivedCallback?.invoke(str)
+                                }
                             }
+                        } catch (exc: SocketException) {
+                            logger.debug("Socket closed!")
+                            // TODO separate callback for service messages
+                            onReceivedCallback?.invoke("Socket server stopped\\!")
+                            socketFile.delete()
+                            break
                         }
                     }
                 }
             }
-            logger.info("Server stopped!")
         } else {
-            onReceivedCallback?.invoke("Socket already started\\!")
+            // TODO separate callback for service messages
+            onReceivedCallback?.invoke("Socket server already started\\!")
         }
     }
 
     internal fun stopServer() {
         if (::serverThread.isInitialized) {
+            logger.info("Socket server termination requested.")
             serverThread.interrupt()
             serverSocket.close()
-            logger.info("Server termination requested.")
+            isRunning.set(false)
         }
     }
 }
