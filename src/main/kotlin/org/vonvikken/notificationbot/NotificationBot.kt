@@ -66,14 +66,7 @@ internal class NotificationBot(config: Config) {
     internal fun sendMessage(text: String, escapeText: Boolean = false) {
         val result = bot.sendMessage(chatID, if (escapeText) text.escape() else text, ParseMode.MARKDOWN_V2)
         logger.debug("Sent message: $text")
-        result.fold(
-            {
-                logger.debug("Response: ${it?.result?.text ?: "[Empty response]"}")
-            },
-            {
-                logger.error("Error! ${it.errorBody?.toString() ?: "[Empty error]"}")
-            }
-        )
+        result.fold({}, { logger.error("Error! ${it.errorBody}") })
     }
 
     internal fun sendServiceMessage(text: String) {
