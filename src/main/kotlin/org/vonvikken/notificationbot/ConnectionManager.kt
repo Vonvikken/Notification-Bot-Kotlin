@@ -79,4 +79,8 @@ internal class ConnectionManager(socketPath: String) {
             isRunning.set(false)
         }
     }
+
+    internal fun serverInfo() {
+        serviceMessageCallback?.invoke("Socket server is ${if (isRunning.get()) "" else "in"}active")
+    }
 }

@@ -22,6 +22,7 @@ class NotificationBot(credentialsFilePath: String) {
 
     var startSocketCallback: OptionalCallback = null
     var stopSocketCallback: OptionalCallback = null
+    var infoSocketCallback: OptionalCallback = null
 
     init {
         val (myToken, chatId) = parseCredentials(Paths.get(credentialsFilePath).toFile())
@@ -31,17 +32,37 @@ class NotificationBot(credentialsFilePath: String) {
             token = myToken
             logLevel = LogLevel.Error
             dispatch {
-                command("startSocket") {
+                command(Command.SERVICE_START.commandName) {
                     execIfAuthorized(startSocketCallback)
                 }
 
-                command("stopSocket") {
+                command(Command.SERVICE_STOP.commandName) {
                     execIfAuthorized(stopSocketCallback)
+                }
+                command(Command.SERVICE_INFO.commandName) {
+                    execIfAuthorized(infoSocketCallback)
+                }
+                command(Command.HELP.commandName) {
+                    execIfAuthorized {
+                        val stringBuilder = StringBuilder()
+                        stringBuilder.appendLine("*Available commands:*").appendLine()
+                        Command.values().forEach { cmd ->
+                            stringBuilder.append("\u2022 `/${cmd.commandName}` ")
+                                .appendLine("\u2192 ${cmd.description.escape()}")
+                        }
+                        sendMessage("$stringBuilder")
+                    }
                 }
             }
         }
         bot.startPolling()
-        sendMessage("_*${"Notification bot started!".escape()}*_")
+
+        sendMessage(
+            """*${"Notification bot started!".escape()}*
+               |
+               |_Use `/help` to list all the available commands_
+            """.trimMargin()
+        )
         logger.info("Notification bot started")
     }
 
@@ -84,7 +105,14 @@ class NotificationBot(credentialsFilePath: String) {
     }
 }
 
+internal data class ConnectionCredentials(val token: String, @Json(name = "chat_id") val chatID: Long)
+
 private fun parseCredentials(path: File): ConnectionCredentials =
     Klaxon().parse<ConnectionCredentials>(path) ?: throw IOException("Cannot parse config file!")
 
-internal data class ConnectionCredentials(val token: String, @Json(name = "chat_id") val chatID: Long)
+private enum class Command(val commandName: String, val description: String) {
+    SERVICE_START("serviceStart", "Start the notification listener service."),
+    SERVICE_STOP("serviceStop", "Stop the notification listener service."),
+    SERVICE_INFO("serviceInfo", "Status of the notification listener service."),
+    HELP("help", "Print command list."),
+}
