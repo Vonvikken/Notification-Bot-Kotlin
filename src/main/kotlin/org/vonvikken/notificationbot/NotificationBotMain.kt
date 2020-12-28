@@ -17,14 +17,14 @@ fun main() {
     val connectionManager = ConnectionManager(config)
     val notificationBot = NotificationBot(config)
 
-    notificationBot.startSocketCallback = connectionManager::startServer
-    notificationBot.stopSocketCallback = connectionManager::stopServer
-    notificationBot.infoSocketCallback = connectionManager::serverInfo
+    notificationBot.serverStartCallback = connectionManager::serverStart
+    notificationBot.serverStopCallback = connectionManager::serverStop
+    notificationBot.serverInfoCallback = connectionManager::serverInfo
 
     connectionManager.onReceivedCallback = { notificationBot.sendMessage(it) }
     connectionManager.serviceMessageCallback = { notificationBot.sendMessage("_Service message:_ `${it.escape()}`") }
 
-    connectionManager.startServer()
+    connectionManager.serverStart()
 }
 
 internal data class Config(

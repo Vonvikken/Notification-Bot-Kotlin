@@ -30,7 +30,7 @@ internal class ConnectionManager(config: Config) {
         val isRunning = AtomicBoolean()
     }
 
-    internal fun startServer() {
+    internal fun serverStart() {
         if (!isRunning.getAndSet(true)) {
             logger.info("Socket server start requested.")
             serverThread = thread(start = true, name = "Socket server") {
@@ -71,7 +71,7 @@ internal class ConnectionManager(config: Config) {
         }
     }
 
-    internal fun stopServer() {
+    internal fun serverStop() {
         if (::serverThread.isInitialized) {
             logger.info("Socket server termination requested.")
             serverThread.interrupt()

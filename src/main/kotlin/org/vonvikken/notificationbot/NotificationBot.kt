@@ -15,9 +15,9 @@ internal class NotificationBot(config: Config) {
     private val bot: Bot
     private val chatID: Long = config.chatID
 
-    var startSocketCallback: OptionalCallback = null
-    var stopSocketCallback: OptionalCallback = null
-    var infoSocketCallback: OptionalCallback = null
+    var serverStartCallback: OptionalCallback = null
+    var serverStopCallback: OptionalCallback = null
+    var serverInfoCallback: OptionalCallback = null
 
     init {
 
@@ -26,15 +26,15 @@ internal class NotificationBot(config: Config) {
             logLevel = LogLevel.Error
             dispatch {
                 command(Command.SERVICE_START.commandName) {
-                    execIfAuthorized(startSocketCallback)
+                    execIfAuthorized(serverStartCallback)
                 }
 
                 command(Command.SERVICE_STOP.commandName) {
-                    execIfAuthorized(stopSocketCallback)
+                    execIfAuthorized(serverStopCallback)
                 }
 
                 command(Command.SERVICE_INFO.commandName) {
-                    execIfAuthorized(infoSocketCallback)
+                    execIfAuthorized(serverInfoCallback)
                 }
 
                 command(Command.HELP.commandName) {
