@@ -1,7 +1,5 @@
 package org.vonvikken.notificationbot
 
-import com.beust.klaxon.Json
-import com.beust.klaxon.Klaxon
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
@@ -11,25 +9,20 @@ import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.logging.LogLevel
 import com.github.kotlintelegrambot.network.fold
-import java.io.File
-import java.io.IOException
-import java.nio.file.Paths
 
-class NotificationBot(credentialsFilePath: String) {
+internal class NotificationBot(config: Config) {
     private val logger by getLogger { }
     private val bot: Bot
-    private val chatID: Long
+    private val chatID: Long = config.chatID
 
     var startSocketCallback: OptionalCallback = null
     var stopSocketCallback: OptionalCallback = null
     var infoSocketCallback: OptionalCallback = null
 
     init {
-        val (myToken, chatId) = parseCredentials(Paths.get(credentialsFilePath).toFile())
-        chatID = chatId
 
         bot = bot {
-            token = myToken
+            token = config.token
             logLevel = LogLevel.Error
             dispatch {
                 command(Command.SERVICE_START.commandName) {
@@ -106,11 +99,6 @@ class NotificationBot(credentialsFilePath: String) {
         return isOk
     }
 }
-
-internal data class ConnectionCredentials(val token: String, @Json(name = "chat_id") val chatID: Long)
-
-private fun parseCredentials(path: File): ConnectionCredentials =
-    Klaxon().parse<ConnectionCredentials>(path) ?: throw IOException("Cannot parse config file!")
 
 private enum class Command(val commandName: String, val description: String) {
     SERVICE_START("serviceStart", "Start the notification listener service."),

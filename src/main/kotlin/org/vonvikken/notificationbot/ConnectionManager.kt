@@ -12,10 +12,10 @@ import kotlin.concurrent.thread
 
 const val BUFFER_SIZE = 4096
 
-internal class ConnectionManager(socketPath: String) {
+internal class ConnectionManager(config: Config) {
 
     private val logger by getLogger { }
-    private val socketFile: File = Paths.get(socketPath).toFile()
+    private val socketFile: File = Paths.get(config.socketPath).toFile()
     private lateinit var serverThread: Thread
     private lateinit var serverSocket: AFUNIXServerSocket
 
