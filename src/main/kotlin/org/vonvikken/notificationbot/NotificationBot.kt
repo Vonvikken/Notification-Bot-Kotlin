@@ -39,13 +39,15 @@ internal class NotificationBot(config: Config) {
 
                 command(Command.HELP.commandName) {
                     execIfAuthorized {
-                        val stringBuilder = StringBuilder()
-                        stringBuilder.appendLine("${"information_source".emoji()}  *Available commands*").appendLine()
-                        Command.values().forEach { cmd ->
-                            stringBuilder.append("\u2022 `/${cmd.commandName}` ")
-                                .appendLine("\u2192 ${cmd.description.escape()}")
+                        StringBuilder().apply {
+                            appendLine("${"information_source".emoji()}  *Available commands*")
+                            appendLine()
+                            Command.values().forEach { cmd ->
+                                append("\u2022 `/${cmd.commandName}` ")
+                                appendLine("\u2192 ${cmd.description.escape()}")
+                            }
+                            sendMessage("$this")
                         }
-                        sendMessage("$stringBuilder")
                     }
                 }
             }
