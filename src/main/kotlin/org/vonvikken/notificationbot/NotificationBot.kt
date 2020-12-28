@@ -39,9 +39,11 @@ class NotificationBot(credentialsFilePath: String) {
                 command(Command.SERVICE_STOP.commandName) {
                     execIfAuthorized(stopSocketCallback)
                 }
+
                 command(Command.SERVICE_INFO.commandName) {
                     execIfAuthorized(infoSocketCallback)
                 }
+
                 command(Command.HELP.commandName) {
                     execIfAuthorized {
                         val stringBuilder = StringBuilder()
