@@ -20,6 +20,7 @@ internal class ConnectionManager(socketPath: String) {
     private lateinit var serverSocket: AFUNIXServerSocket
 
     internal var onReceivedCallback: OptionalConsumer<String> = null
+    internal var serviceMessageCallback: OptionalConsumer<String> = null
 
     init {
         socketFile.deleteOnExit()
@@ -31,13 +32,13 @@ internal class ConnectionManager(socketPath: String) {
 
     internal fun startServer() {
         if (!isRunning.getAndSet(true)) {
+            logger.info("Socket server start requested.")
             serverThread = thread(start = true, name = "Socket server") {
                 serverSocket = AFUNIXServerSocket.newInstance()
                 serverSocket.use { server ->
                     server.bind(AFUNIXSocketAddress(socketFile))
 
-                    // TODO separate callback for service messages
-                    onReceivedCallback?.invoke("_Socket server started\\!_")
+                    serviceMessageCallback?.invoke("Socket server started")
                     logger.debug("UNIX socket bound to ${socketFile.absolutePath}")
 
                     val permissions = setOf(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE)
@@ -58,8 +59,7 @@ internal class ConnectionManager(socketPath: String) {
                             }
                         } catch (exc: SocketException) {
                             logger.debug("Socket closed!")
-                            // TODO separate callback for service messages
-                            onReceivedCallback?.invoke("Socket server stopped\\!")
+                            serviceMessageCallback?.invoke("Socket server stopped")
                             socketFile.delete()
                             break
                         }
@@ -67,8 +67,7 @@ internal class ConnectionManager(socketPath: String) {
                 }
             }
         } else {
-            // TODO separate callback for service messages
-            onReceivedCallback?.invoke("Socket server already started\\!")
+            serviceMessageCallback?.invoke("Socket server already started")
         }
     }
 

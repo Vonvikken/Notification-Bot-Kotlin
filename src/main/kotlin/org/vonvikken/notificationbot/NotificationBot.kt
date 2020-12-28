@@ -23,11 +23,6 @@ class NotificationBot(credentialsFilePath: String) {
     var startSocketCallback: OptionalCallback = null
     var stopSocketCallback: OptionalCallback = null
 
-    companion object {
-        val escapedCharacters =
-            arrayOf('_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!')
-    }
-
     init {
         val (myToken, chatId) = parseCredentials(Paths.get(credentialsFilePath).toFile())
         chatID = chatId
@@ -88,14 +83,6 @@ class NotificationBot(credentialsFilePath: String) {
         return isOk
     }
 }
-
-private fun String.escape(): String = map {
-    if (it in NotificationBot.escapedCharacters) {
-        """\$it"""
-    } else {
-        it
-    }
-}.joinToString(separator = "")
 
 private fun parseCredentials(path: File): ConnectionCredentials =
     Klaxon().parse<ConnectionCredentials>(path) ?: throw IOException("Cannot parse config file!")
