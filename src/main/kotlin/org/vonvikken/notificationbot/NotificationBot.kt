@@ -55,18 +55,15 @@ internal class NotificationBot(config: Config) {
         }
         bot.startPolling()
 
-        sendMessage(
-            Message.createMessage(Message.Type.APPLICATION) {
-                val check = "white_check_mark".emoji()
-                val rocket = "rocket".emoji()
+        sendApplicationMessage {
+            val check = "white_check_mark".emoji()
+            val rocket = "rocket".emoji()
 
-                return@createMessage """$check ${"Bot started!".escape().italic().bold()} $rocket
-                                       |
-                                       |_Use `/help` to list all the available commands_
-                                     """.trimMargin()
-            }
-        )
-        logger.info("Notification bot started")
+            """$check ${"Bot started!".escape().italic().bold()} $rocket
+              |
+              |_Use `/help` to list all the available commands_""".trimMargin()
+        }
+        logger.info("Notification bot started.")
     }
 
     private fun sendMessage(message: Message) {
@@ -81,6 +78,10 @@ internal class NotificationBot(config: Config) {
 
     internal fun sendNotificationMessage(text: String) {
         sendMessage(Message.createMessage(Message.Type.NOTIFICATION, text::escape))
+    }
+
+    internal fun sendApplicationMessage(textBlock: () -> String) {
+        sendMessage(Message.createMessage(Message.Type.APPLICATION, textBlock))
     }
 
     private fun CommandHandlerEnvironment.execIfAuthorized(block: OptionalCallback) {

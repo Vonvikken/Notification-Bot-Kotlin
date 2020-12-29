@@ -33,6 +33,16 @@ fun main() {
     connectionManager.onReceivedCallback = notificationBot::sendNotificationMessage
     connectionManager.serviceMessageCallback = notificationBot::sendServiceMessage
 
+    Runtime.getRuntime().addShutdownHook(object : Thread() {
+        override fun run() {
+            connectionManager.serverStop()
+            notificationBot.sendApplicationMessage {
+                "${"stop_sign".emoji()} ${"Bot stopped!".escape().italic().bold()} ${"hand".emoji()}"
+            }
+            logger.info("Notification bot stopped.")
+        }
+    })
+
     connectionManager.serverStart()
 }
 

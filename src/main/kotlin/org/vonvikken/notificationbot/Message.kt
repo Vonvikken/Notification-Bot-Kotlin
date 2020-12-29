@@ -1,6 +1,6 @@
 package org.vonvikken.notificationbot
 
-internal class Message private constructor(title: String, text: () -> String, emoji: String? = null) {
+internal class Message private constructor(title: String, textBlock: () -> String, emoji: String? = null) {
 
     enum class Type(val title: String, val emoji: String? = null) {
         APPLICATION("Notification Bot", "bell"),
@@ -10,11 +10,11 @@ internal class Message private constructor(title: String, text: () -> String, em
     }
 
     companion object {
-        internal fun createMessage(messageType: Type, text: () -> String): Message =
-            Message(messageType.title, text, messageType.emoji)
+        internal fun createMessage(messageType: Type, textBlock: () -> String): Message =
+            Message(messageType.title, textBlock, messageType.emoji)
     }
 
     val formattedText = """${emoji?.emoji() ?: ""} ${title.escape().bold()}
                           |
-                          |${text.invoke()}""".trimMargin()
+                          |${textBlock.invoke()}""".trimMargin()
 }
