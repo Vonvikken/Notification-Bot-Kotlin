@@ -5,6 +5,7 @@ package org.vonvikken.notificationbot
 import com.beust.klaxon.Json
 import com.beust.klaxon.Klaxon
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.IOException
 import java.nio.file.Paths
 
@@ -12,7 +13,15 @@ const val CONFIG_DEFAULT_PATH = "config.json"
 const val SOCKET_DEFAULT_PATH = "/var/tmp/notificationbot.sock"
 
 fun main() {
-    val config = Config.parseConfig(Paths.get(CONFIG_DEFAULT_PATH).toFile())
+    val logger by getLogger { }
+    val config: Config
+
+    try {
+        config = Config.parseConfig(Paths.get(CONFIG_DEFAULT_PATH).toFile())
+    } catch (fnfe: FileNotFoundException) {
+        logger.error("Unable to find config file!")
+        return
+    }
 
     val connectionManager = ConnectionManager(config)
     val notificationBot = NotificationBot(config)
