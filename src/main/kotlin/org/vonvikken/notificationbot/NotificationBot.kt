@@ -5,10 +5,10 @@ import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.dispatcher.handlers.CommandHandlerEnvironment
-import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.logging.LogLevel
 import com.github.kotlintelegrambot.network.fold
+import com.github.kotlintelegrambot.entities.Message as BotMessage
 
 internal class NotificationBot(config: Config) {
     private val logger by getLogger { }
@@ -39,15 +39,16 @@ internal class NotificationBot(config: Config) {
 
                 command(Command.HELP.commandName) {
                     execIfAuthorized {
-                        StringBuilder().apply {
-                            appendLine("${"information_source".emoji()}  *Available commands*")
-                            appendLine()
-                            Command.values().forEach { cmd ->
-                                append("\u2022 `/${cmd.commandName}` ")
-                                appendLine("\u2192 ${cmd.description.escape()}")
+                        sendMessage(
+                            Message.createMessage(Message.Type.HELP) {
+                                return@createMessage StringBuilder().apply {
+                                    Command.values().forEach { cmd ->
+                                        append("\u2022 `/${cmd.commandName}` ")
+                                        appendLine("\u2192 ${cmd.description.escape()}")
+                                    }
+                                }.toString()
                             }
-                            sendMessage("$this")
-                        }
+                        )
                     }
                 }
             }
@@ -55,26 +56,31 @@ internal class NotificationBot(config: Config) {
         bot.startPolling()
 
         sendMessage(
-            """${"bell".emoji()} *${"Notification bot started!".escape()}*
-               |
-               |_Use `/help` to list all the available commands_
-            """.trimMargin()
+            Message.createMessage(Message.Type.APPLICATION) {
+                val check = "white_check_mark".emoji()
+                val rocket = "rocket".emoji()
+
+                return@createMessage """$check ${"Bot started!".escape().italic().bold()} $rocket
+                                       |
+                                       |_Use `/help` to list all the available commands_
+                                     """.trimMargin()
+            }
         )
         logger.info("Notification bot started")
     }
 
-    internal fun sendMessage(text: String, escapeText: Boolean = false) {
-        val result = bot.sendMessage(chatID, if (escapeText) text.escape() else text, ParseMode.MARKDOWN_V2)
-        logger.debug("Sent message: $text")
+    private fun sendMessage(message: Message) {
+        val result = bot.sendMessage(chatID, message.formattedText, ParseMode.MARKDOWN_V2)
+        logger.debug("Sent message: ${message.formattedText}")
         result.fold({}, { logger.error("Error! ${it.errorBody}") })
     }
 
     internal fun sendServiceMessage(text: String) {
-        sendMessage(
-            """${"gear".emoji()} *Service message*
-               |
-               |`${text.escape()}`""".trimMargin()
-        )
+        sendMessage(Message.createMessage(Message.Type.SERVICE, text.escape()::monospace))
+    }
+
+    internal fun sendNotificationMessage(text: String) {
+        sendMessage(Message.createMessage(Message.Type.NOTIFICATION, text::escape))
     }
 
     private fun CommandHandlerEnvironment.execIfAuthorized(block: OptionalCallback) {
@@ -83,7 +89,7 @@ internal class NotificationBot(config: Config) {
         }
     }
 
-    private fun checkMessageChatId(message: Message?): Boolean {
+    private fun checkMessageChatId(message: BotMessage?): Boolean {
         if (message == null)
             return false
 

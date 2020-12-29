@@ -21,7 +21,7 @@ fun main() {
     notificationBot.serverStopCallback = connectionManager::serverStop
     notificationBot.serverInfoCallback = connectionManager::serverInfo
 
-    connectionManager.onReceivedCallback = { notificationBot.sendMessage(it, escapeText = true) }
+    connectionManager.onReceivedCallback = notificationBot::sendNotificationMessage
     connectionManager.serviceMessageCallback = notificationBot::sendServiceMessage
 
     connectionManager.serverStart()

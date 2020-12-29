@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package org.vonvikken.notificationbot
 
 import com.vdurmont.emoji.EmojiManager
@@ -15,3 +17,9 @@ internal fun String.escape(): String =
 internal fun String.emoji(): String = EmojiParser.parseToUnicode(":$this:").let {
     if (EmojiManager.isEmoji(it)) it else ""
 }
+
+internal fun String.bold(): String = "*$this*"
+internal fun String.italic(): String = "_${this}_"
+internal fun String.monospace(): String = "`$this`"
+internal fun String.strikethrough(): String = "~$this~"
+internal fun String.underline(): String = "__${this}__"
