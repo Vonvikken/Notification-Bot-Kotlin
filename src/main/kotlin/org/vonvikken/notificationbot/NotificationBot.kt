@@ -8,6 +8,7 @@ import com.github.kotlintelegrambot.dispatcher.handlers.CommandHandlerEnvironmen
 import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.logging.LogLevel
 import com.github.kotlintelegrambot.network.fold
+import com.vdurmont.emoji.EmojiParser
 import com.github.kotlintelegrambot.entities.Message as BotMessage
 
 internal class NotificationBot(config: Config) {
@@ -77,7 +78,7 @@ internal class NotificationBot(config: Config) {
     }
 
     internal fun sendNotificationMessage(text: String) {
-        sendMessage(Message.createMessage(Message.Type.NOTIFICATION, text::escape))
+        sendMessage(Message.createMessage(Message.Type.NOTIFICATION, EmojiParser.parseToUnicode(text)::escape))
     }
 
     internal fun sendApplicationMessage(textBlock: () -> String) {
