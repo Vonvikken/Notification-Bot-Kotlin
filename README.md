@@ -1,9 +1,9 @@
-![Kotlin](https://img.shields.io/badge/Kotlin-1.4-blue?style=flat&logo=kotlin)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Vonvikken/Notification-Bot-Kotlin)
-![GitHub last commit](https://img.shields.io/github/last-commit/Vonvikken/Notification-Bot-Kotlin)
-![GitHub](https://img.shields.io/github/license/Vonvikken/Notification-Bot-Kotlin)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
-[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
+![Kotlin](https://img.shields.io/badge/Kotlin-1.4-blue?style=plastic&logo=kotlin)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Vonvikken/Notification-Bot-Kotlin?style=plastic)
+![GitHub last commit](https://img.shields.io/github/last-commit/Vonvikken/Notification-Bot-Kotlin?style=plastic)
+![GitHub](https://img.shields.io/github/license/Vonvikken/Notification-Bot-Kotlin?style=plastic)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=plastic)](https://github.com/pre-commit/pre-commit)
+[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg?style=plastic)](https://ktlint.github.io/)
 
 # Notification Bot (Kotlin)
 
