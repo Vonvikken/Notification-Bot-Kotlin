@@ -37,7 +37,7 @@ fun main() {
         override fun run() {
             connectionManager.serverStop()
             notificationBot.sendApplicationMessage {
-                "${"stop_sign".emoji()} ${"Bot stopped!".escape().italic().bold()} ${"hand".emoji()}"
+                "${"stop_sign".emoji()} ${"Bot stopped!".italic().bold()} ${"hand".emoji()}"
             }
             logger.info("Notification bot stopped.")
         }

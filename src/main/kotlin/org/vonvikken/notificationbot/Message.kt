@@ -14,7 +14,7 @@ internal class Message private constructor(title: String, textBlock: () -> Strin
             Message(messageType.title, textBlock, messageType.emoji)
     }
 
-    val formattedText = """${emoji?.emoji() ?: ""} ${title.escape().bold()}
-                          |
-                          |${textBlock.invoke()}""".trimMargin()
+    val text = """${emoji?.emoji() ?: ""} ${title.bold()}
+                 |
+                 |${textBlock.invoke()}""".trimMargin()
 }

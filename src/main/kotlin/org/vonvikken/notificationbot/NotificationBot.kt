@@ -44,8 +44,8 @@ internal class NotificationBot(config: Config) {
                             Message.createMessage(Message.Type.HELP) {
                                 return@createMessage StringBuilder().apply {
                                     Command.values().forEach { cmd ->
-                                        append("\u2022 `/${cmd.commandName}` ")
-                                        appendLine("\u2192 ${cmd.description.escape()}")
+                                        append("\u2022 /${cmd.commandName} ")
+                                        appendLine("\u2192 ${cmd.description}")
                                     }
                                 }.toString()
                             }
@@ -60,25 +60,25 @@ internal class NotificationBot(config: Config) {
             val check = "white_check_mark".emoji()
             val rocket = "rocket".emoji()
 
-            """$check ${"Bot started!".escape().italic().bold()} $rocket
+            """$check ${"Bot started!".italic().bold()} $rocket
               |
-              |_Use `/help` to list all the available commands_""".trimMargin()
+              |<i>Use <code>/help</code> to list all the available commands</i>""".trimMargin()
         }
         logger.info("Notification bot started.")
     }
 
     private fun sendMessage(message: Message) {
-        val result = bot.sendMessage(chatID, message.formattedText, ParseMode.MARKDOWN_V2)
-        logger.debug("Sent message: ${message.formattedText}")
+        val result = bot.sendMessage(chatID, message.text, ParseMode.HTML)
+        logger.debug("Sent message: ${message.text}")
         result.fold({}, { logger.error("Error! ${it.errorBody}") })
     }
 
     internal fun sendServiceMessage(text: String) {
-        sendMessage(Message.createMessage(Message.Type.SERVICE, text.escape()::monospace))
+        sendMessage(Message.createMessage(Message.Type.SERVICE, text::monospace))
     }
 
     internal fun sendNotificationMessage(text: String) {
-        sendMessage(Message.createMessage(Message.Type.NOTIFICATION, EmojiParser.parseToUnicode(text)::escape))
+        sendMessage(Message.createMessage(Message.Type.NOTIFICATION) { EmojiParser.parseToUnicode(text) })
     }
 
     internal fun sendApplicationMessage(textBlock: () -> String) {
