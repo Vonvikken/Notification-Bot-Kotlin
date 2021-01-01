@@ -1,7 +1,7 @@
 ![Kotlin](https://img.shields.io/badge/Kotlin-1.4-blue?style=flat&logo=kotlin)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Vonvikken/Vonvikken-Notification-Bot-Kotlin)
-![GitHub last commit](https://img.shields.io/github/last-commit/Vonvikken/Vonvikken-Notification-Bot-Kotlin)
-![GitHub](https://img.shields.io/github/license/Vonvikken/Vonvikken-Notification-Bot-Kotlin)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Vonvikken/Notification-Bot-Kotlin)
+![GitHub last commit](https://img.shields.io/github/last-commit/Vonvikken/Notification-Bot-Kotlin)
+![GitHub](https://img.shields.io/github/license/Vonvikken/Notification-Bot-Kotlin)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
@@ -104,15 +104,15 @@ You can issue the following commands to the bot:
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/vonvikken/Vonvikken-Notification-Bot-Kotlin.
+Bug reports and pull requests are welcome on GitHub at https://github.com/vonvikken/Notification-Bot-Kotlin.
 This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the
-[code of conduct](https://github.com/vonvikken/Vonvikken-Notification-Bot-Kotlin/blob/master/CODE_OF_CONDUCT.md).
+[code of conduct](https://github.com/vonvikken/Notification-Bot-Kotlin/blob/master/CODE_OF_CONDUCT.md).
 
 ## Code of Conduct
 
 Everyone interacting in the Notification Bot project's codebases, issue trackers, chat rooms and mailing lists is
 expected to follow
-the [code of conduct](https://github.com/vonvikken/Vonvikken-Notification-Bot-Kotlin/blob/master/CODE_OF_CONDUCT.md).
+the [code of conduct](https://github.com/vonvikken/Notification-Bot-Kotlin/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
