@@ -12,12 +12,39 @@ import java.nio.file.Paths
 const val CONFIG_DEFAULT_PATH = "config.json"
 const val SOCKET_DEFAULT_PATH = "/var/tmp/notificationbot.sock"
 
-fun main() {
+fun main(args: Array<String>) {
     val logger by getLogger { }
+    var configPath = CONFIG_DEFAULT_PATH
     val config: Config
 
+    if (args.isNotEmpty()) {
+        when (args[0]) {
+            "-h", "--help" -> {
+                print(
+                    """Options:
+                      |    -h,--help: print this help message.
+                      |    -c, --config <CONFIG_PATH>: path to the config file (default: './config.json').
+                    """.trimMargin()
+                )
+                return
+            }
+            "-c", "--config" -> {
+                if (args.size >= 2) {
+                    configPath = args[1]
+                } else {
+                    logger.error("Config file path not specified! Use '-h' for help.")
+                    return
+                }
+            }
+            else -> {
+                logger.error("Unrecognized option '${args[0]}'! Use '-h' for help.")
+                return
+            }
+        }
+    }
+
     try {
-        config = Config.parseConfig(Paths.get(CONFIG_DEFAULT_PATH).toFile())
+        config = Config.parseConfig(Paths.get(configPath).toFile())
     } catch (fnfe: FileNotFoundException) {
         logger.error("Unable to find config file!")
         return
