@@ -12,8 +12,8 @@ Telegram Bot for receiving notifications (_Kotlin version_).
 ## Description
 
 I create this simple Telegram bot for two reasons: first, make practice with the Kotlin programming language, that I'm
-starting to learn; second, find a way to receive system notifications from the small server I installed on a Raspberry
-Pi at home (backups, package updates...). It's very simple, but I plan to add more features if needed.
+starting to learn; second, find a way to receive system notifications (backups, package updates, etc...) from the small
+server I installed on a Raspberry Pi at home. It's very simple, but I plan to add more features if needed.
 
 This program listens for messages on a UNIX-domain socket, parses them and sends them to a given Telegram group.
 
