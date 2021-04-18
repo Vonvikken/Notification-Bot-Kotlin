@@ -38,6 +38,7 @@
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <kotlin.telegram.bot.version>6.0.1</kotlin.telegram.bot.version>
+        <clikt.version>3.1.0</clikt.version>
         <klaxon.version>5.4</klaxon.version>
         <slf4j.version>1.7.30</slf4j.version>
         <logback.version>1.2.3</logback.version>
@@ -62,6 +63,12 @@
             <groupId>io.github.kotlin-telegram-bot.kotlin-telegram-bot</groupId>
             <artifactId>telegram</artifactId>
             <version>${kotlin.telegram.bot.version}</version>
+        </dependency>
+        <!-- Command line argument parser -->
+        <dependency>
+            <groupId>com.github.ajalt.clikt</groupId>
+            <artifactId>clikt-jvm</artifactId>
+            <version>${clikt.version}</version>
         </dependency>
         <!-- JSON parser -->
         <dependency>
@@ -111,6 +118,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
+                <!--suppress DifferentKotlinMavenVersion -->
                 <version>${kotlin.version}</version>
                 <executions>
                     <execution>
