@@ -1,13 +1,18 @@
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v3.4.0
+  rev: v4.1.0
   hooks:
   - id: trailing-whitespace
   - id: end-of-file-fixer
 - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v1.6.1
+  rev: v2.2.0
   hooks:
   - id: pretty-format-kotlin
     args: [--autofix]
   - id: pretty-format-yaml
     args: [--autofix, --indent, '2']
+- repo: https://github.com/vonvikken/pre-commit-hooks
+  rev: v0.2.0
+  hooks:
+  - id: clean-requirements
+  - id: no-telegram-tokens
