@@ -34,12 +34,16 @@ class NotificationBotMain : CliktCommand() {
         val connectionManager = ConnectionManager(config)
         val notificationBot = NotificationBot(config)
 
-        notificationBot.serverStartCallback = connectionManager::serverStart
-        notificationBot.serverStopCallback = connectionManager::serverStop
-        notificationBot.serverInfoCallback = connectionManager::serverInfo
+        with(notificationBot) {
+            serverStartCallback = connectionManager::serverStart
+            serverStopCallback = connectionManager::serverStop
+            serverInfoCallback = connectionManager::serverInfo
+        }
 
-        connectionManager.onReceivedCallback = notificationBot::sendNotificationMessage
-        connectionManager.serviceMessageCallback = notificationBot::sendServiceMessage
+        with(connectionManager) {
+            onReceivedCallback = notificationBot::sendNotificationMessage
+            serviceMessageCallback = notificationBot::sendServiceMessage
+        }
 
         Runtime.getRuntime().addShutdownHook(object : Thread() {
             override fun run() {

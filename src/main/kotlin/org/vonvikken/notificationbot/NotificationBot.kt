@@ -3,8 +3,8 @@ package org.vonvikken.notificationbot
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
+import com.github.kotlintelegrambot.dispatcher.Dispatcher
 import com.github.kotlintelegrambot.dispatcher.command
-import com.github.kotlintelegrambot.dispatcher.handlers.CommandHandlerEnvironment
 import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.logging.LogLevel
 import com.github.kotlintelegrambot.network.fold
@@ -26,31 +26,20 @@ internal class NotificationBot(config: Config) {
             token = config.token
             logLevel = LogLevel.Error
             dispatch {
-                command(Command.SERVICE_START.commandName) {
-                    execIfAuthorized(serverStartCallback)
-                }
-
-                command(Command.SERVICE_STOP.commandName) {
-                    execIfAuthorized(serverStopCallback)
-                }
-
-                command(Command.SERVICE_INFO.commandName) {
-                    execIfAuthorized(serverInfoCallback)
-                }
-
-                command(Command.HELP.commandName) {
-                    execIfAuthorized {
-                        sendMessage(
-                            Message.createMessage(Message.Type.HELP) {
-                                return@createMessage StringBuilder().apply {
-                                    Command.values().forEach { cmd ->
-                                        append("\u2022 /${cmd.commandName} ")
-                                        appendLine("\u2192 ${cmd.description}")
-                                    }
-                                }.toString()
-                            }
-                        )
-                    }
+                installCommand(Command.SERVICE_START, serverStartCallback)
+                installCommand(Command.SERVICE_STOP, serverStopCallback)
+                installCommand(Command.SERVICE_INFO, serverInfoCallback)
+                installCommand(Command.HELP) {
+                    sendMessage(
+                        Message.createMessage(Message.Type.HELP) {
+                            return@createMessage StringBuilder().apply {
+                                Command.values().forEach { cmd ->
+                                    append("\u2022 /${cmd.commandName} ")
+                                    appendLine("\u2192 ${cmd.description}")
+                                }
+                            }.toString()
+                        }
+                    )
                 }
             }
         }
@@ -62,9 +51,16 @@ internal class NotificationBot(config: Config) {
 
             """$check ${"Bot started!".italic().bold()} $rocket
               |
-              |<i>Use <code>/help</code> to list all the available commands</i>""".trimMargin()
+              |<i>Use <code>/help</code> to list all the available commands</i>
+            """.trimMargin()
         }
         logger.info("Notification bot started.")
+    }
+
+    private fun Dispatcher.installCommand(command: Command, block: OptionalCallback) {
+        command(command.commandName) {
+            block?.takeIf { checkMessageChatId(update.message) }?.invoke()
+        }
     }
 
     private fun sendMessage(message: Message) {
@@ -83,12 +79,6 @@ internal class NotificationBot(config: Config) {
 
     internal fun sendApplicationMessage(textBlock: () -> String) {
         sendMessage(Message.createMessage(Message.Type.APPLICATION, textBlock))
-    }
-
-    private fun CommandHandlerEnvironment.execIfAuthorized(block: OptionalCallback) {
-        if (block != null && checkMessageChatId(update.message)) {
-            block.invoke()
-        }
     }
 
     private fun checkMessageChatId(message: BotMessage?): Boolean {
