@@ -4,6 +4,7 @@
 ![GitHub](https://img.shields.io/github/license/Vonvikken/Notification-Bot-Kotlin?style=plastic)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=plastic)](https://github.com/pre-commit/pre-commit)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg?style=plastic)](https://ktlint.github.io/)
+[![Java CI with Maven](https://github.com/Vonvikken/Notification-Bot-Kotlin/actions/workflows/maven.yml/badge.svg)](https://github.com/Vonvikken/Notification-Bot-Kotlin/actions/workflows/maven.yml)
 
 # Notification Bot (Kotlin)
 
