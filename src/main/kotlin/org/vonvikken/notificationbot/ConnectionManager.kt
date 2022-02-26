@@ -34,34 +34,35 @@ internal class ConnectionManager(config: Config) {
         if (!isRunning.getAndSet(true)) {
             logger.info("Socket server start requested.")
             serverThread = thread(start = true, name = "Socket server") {
-                serverSocket = AFUNIXServerSocket.newInstance()
-                serverSocket.use { server ->
-                    server.bind(AFUNIXSocketAddress(socketFile))
+                serverSocket = AFUNIXServerSocket.newInstance().also {
+                    it.use { server ->
+                        server.bind(AFUNIXSocketAddress(socketFile))
 
-                    serviceMessageCallback?.invoke("Socket server started")
-                    logger.debug("UNIX socket bound to ${socketFile.absolutePath}")
+                        serviceMessageCallback?.invoke("Socket server started")
+                        logger.debug("UNIX socket bound to ${socketFile.absolutePath}")
 
-                    val permissions = setOf(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE)
-                    Files.setPosixFilePermissions(socketFile.toPath(), permissions)
+                        val permissions = setOf(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE)
+                        Files.setPosixFilePermissions(socketFile.toPath(), permissions)
 
-                    while (!serverThread.isInterrupted) {
-                        logger.debug("Waiting for connection...")
-                        try {
-                            server.accept().use { socket ->
-                                logger.debug("Connected!")
-                                socket.inputStream.use { input ->
-                                    val buffer = ByteArray(BUFFER_SIZE)
-                                    val numRead = input.read(buffer)
-                                    val str = String(buffer, 0, numRead)
-                                    logger.debug("Received from socket: $str")
-                                    onReceivedCallback?.invoke(str)
+                        while (!serverThread.isInterrupted) {
+                            logger.debug("Waiting for connection...")
+                            try {
+                                server.accept().use { socket ->
+                                    logger.debug("Connected!")
+                                    socket.inputStream.use { input ->
+                                        val buffer = ByteArray(BUFFER_SIZE)
+                                        val numRead = input.read(buffer)
+                                        val str = String(buffer, 0, numRead)
+                                        logger.debug("Received from socket: $str")
+                                        onReceivedCallback?.invoke(str)
+                                    }
                                 }
+                            } catch (exc: SocketException) {
+                                logger.debug("Socket closed!")
+                                serviceMessageCallback?.invoke("Socket server stopped")
+                                socketFile.delete()
+                                break
                             }
-                        } catch (exc: SocketException) {
-                            logger.debug("Socket closed!")
-                            serviceMessageCallback?.invoke("Socket server stopped")
-                            socketFile.delete()
-                            break
                         }
                     }
                 }
