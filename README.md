@@ -1,4 +1,4 @@
-![Kotlin](https://img.shields.io/badge/Kotlin-1.4-blue?style=plastic&logo=kotlin)
+![Kotlin](https://img.shields.io/badge/Kotlin-1.6-blue?style=plastic&logo=kotlin)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Vonvikken/Notification-Bot-Kotlin?style=plastic)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Vonvikken/Notification-Bot-Kotlin?style=plastic)
 ![GitHub](https://img.shields.io/github/license/Vonvikken/Notification-Bot-Kotlin?style=plastic)
@@ -26,7 +26,7 @@ it [here](https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a
 
 To build the bot, you need [Apache Maven](https://maven.apache.org/) correctly installed and configured.
 
-The bot runs on Linux on JRE 1.8 or later, so make sure it is installed in your system.
+The bot runs on Linux on JRE 1.8 or later, so make sure it is installed on your target system.
 
 ## Installation
 
