@@ -36,7 +36,7 @@ internal class ConnectionManager(config: Config) {
             serverThread = thread(start = true, name = "Socket server") {
                 serverSocket = AFUNIXServerSocket.newInstance().also {
                     it.use { server ->
-                        server.bind(AFUNIXSocketAddress(socketFile))
+                        server.bind(AFUNIXSocketAddress.of(socketFile))
 
                         serviceMessageCallback?.invoke("Socket server started")
                         logger.debug("UNIX socket bound to ${socketFile.absolutePath}")
